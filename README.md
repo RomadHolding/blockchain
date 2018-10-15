@@ -114,14 +114,14 @@ Here is a list of some consensus protocols [6]:
 7. Hashgraph Virtual-Voting - asynchronous BFT, not PBFT [23]
 
 The following table depicts the platforms’ description working on the above-mentioned consensus protocol families:
-| Algorithm type                    | Platform                               |
-| --------------------------------- | -------------------------------------- |
-| Paxos                             | None                                   |
-| RAFT                              | Kadena [https://github.com/kadena-io/] |
-| PBFT                              | Hyperledger, Stellar, Ripple, Zilliqa  |
-| RBFT (PBFT modification)          | Sovrin, Hyperledger                    |
-| dBFT (PBFT modification)          | NEO                                    |
 
+| Algorithm type           | Platform                               |
+| ------------------------ | -------------------------------------- |
+| Paxos                    | None                                   |
+| RAFT                     | Kadena [https://github.com/kadena-io/] |
+| PBFT                     | Hyperledger, Stellar, Ripple, Zilliqa  |
+| RBFT (PBFT modification) | Sovrin, Hyperledger                    |
+| dBFT (PBFT modification) | NEO                                    |
 
 ### 3.2. BFT/PBFT/ABFT/RBFT/DBFT algorithms comparison
 
@@ -132,12 +132,15 @@ The picture displays the reviews/estimates for 4 nodes.
 ![Throughput single crash](./Consensus_Selection_02.jpg)
 
 ![Throughput delay](./Consensus_Selection_03.jpg)
+
 RBFT and Aadvark are showing the best performance when there is a continuous message delay.
 
 ![Throughput flooding](./Consensus_Selection_04.jpg)
+
 RBFT and Aadvark are still showing the best performance when flooding.
 
 ![Throughput complex scenario](./Consensus_Selection_05.jpg)
+
 Aliph and PBFT are winners, however the performance when there are anomalies is better when compared to the normal conditions. This is weird.
 
 The research [25] compares PBFT, Chain, RPFT, Aardvark, Aliph, Zyzzyva (only the fault-free version) having 4 nodes, 1 node can be faulty. The research shows the following results:
@@ -203,9 +206,9 @@ The ROMAD consensus is going to be based on BFT (more precisely dBFT). Some idea
 
 # 4. Model
 The following design principals will be used in ROMAD blockchain:
-1. Directed Acyclic Graph. '''Motivation:''' the transactions can be done in parallel. It means better tx/s rate.
-2. Sharding. '''Motivation:''' the sharding reduces the consensus time. Transactions finality becomes lower.
-3. Voting is based on the Proof-of-Reputation + penalties. The voting PoR nodes have the certain hardware requirements (see below). '''Motivation:''' faulty or malicious nodes will get penalized quickly. The Sybil attack possibility is low.
+1. Directed Acyclic Graph. **Motivation:** the transactions can be done in parallel. It means better tx/s rate.
+2. Sharding. **Motivation:** the sharding reduces the consensus time. Transactions finality becomes lower.
+3. Voting is based on the Proof-of-Reputation + penalties. The voting PoR nodes have the certain hardware requirements (see below). **Motivation:** faulty or malicious nodes will get penalized quickly. The Sybil attack possibility is low.
 4. Consensus type: dBFT.
 4. Digital signatures. ECC-Shnorr (like in Zilliqa) or some ECDSA treshold option.
 
@@ -255,19 +258,19 @@ Consensus algorithm:
 10. Remember, the delegates see the same blockchain state in more or less synchronized manner, so everyone knows whose turn is it now to form up a "suggestion".
 11. The "suggestion" is signed with a secret key and is broadcasted.
 
-$$<Proposal,bi,v,p,r_p,block,\sigma(block, P_p)>$$
+![Proposal](./Eqn1.gif)
 
 where:
   *	the speaker with the identifier p;
   *	has a reputation r;
   *	signed a block bi, view  = v;
   *	the block contains = block [the transactions hashes];
-  *	$\sigma(block, P_p)$ - the $block$ is signed with the secret key $P_p$ of the user $p$.
+  *	![Block](./Eqn2.gif) - the _block_ is signed with the secret key $P_p$ of the user $p$.
 
 12. Once the message from 11 is broadcasted, the delegates are verifying it with the certain rules (see below).
 13. The delegates are sending the message:
 
-$$<Response,bi,v,p,r_d,block,\sigma(block, P_d)>$$
+![Response](./Eqn2.gif)
 
 where:
   *	Response - Proposal Agree or Proposal Failed
