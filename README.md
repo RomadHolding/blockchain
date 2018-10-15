@@ -236,7 +236,7 @@ To become a delegate one needs to register as a delegate. The registration is th
 
 ROMAD team is not currently considering the bond deposits to solve the Nothing-at-Stake problem. We use the reputation idea instead.
 
-1. Initially each delegate gets a fixed reputation value $\rho$.
+1. Initially each delegate gets a fixed reputation value ![Rho](./Rho.gif).
 
 2. All reputation values are the same and do not depends on the number of tokens at delegate's stacke.
 
@@ -265,7 +265,7 @@ where:
   *	has a reputation r;
   *	signed a block bi, view  = v;
   *	the block contains = block [the transactions hashes];
-  *	![Block](./Eqn2.gif) - the _block_ is signed with the secret key $P_p$ of the user $p$.
+  *	![Block1](./Eqn3.gif) - the _block_ is signed with the secret key P_p of the user _p_.
 
 12. Once the message from 11 is broadcasted, the delegates are verifying it with the certain rules (see below).
 13. The delegates are sending the message:
@@ -278,7 +278,7 @@ where:
   *	view  = v;
   *	d - the delegate identifier
   *	r - the delegate reputation
-  *	$\sigma(block, P_d)$ - the $block$ is signed with the secret key $P_d$ of the user $d$.
+  *	![Block2](./Eqn4.gif) - the _block_ is signed with the secret key P_d of the user _d_.
 14. When there is a message Reposnse: Proposal Agree  from (𝑛 - 𝑓) delegates, every delegate understands there is a consensus and the full block is written on the blockchain.
 15. The next round begins (goto 5) (yeah, goto haters!)
 
@@ -298,7 +298,7 @@ where:
 
 When the other verifiers are getting the Proposal Failed message and there are at least (𝑛 - 𝑓) of them, they also send the ChangeView message.
   * Thus the malicious speaker is opted out for the different one;
-  * the malicious speaker is penalized with decreasing $β=1/e^((f-1)*2)$ , where f - is the fails number for the given speaker. A single fail, therefore, is of no importance, 2 fails decrease the reputation 8 times, 5 fails will completely nullify the reputation;
+  * the malicious speaker is penalized with decreasing β=1/e^((f-1)*2) , where f - is the fails number for the given speaker. A single fail, therefore, is of no importance, 2 fails decrease the reputation 8 times, 5 fails will completely nullify the reputation;
   * the Response messages are stored on the blockchain.
 
 ***If there is a timeout on 14*** and there are no (𝑛 - 𝑓) response messages
