@@ -236,11 +236,11 @@ To become a delegate one needs to register as a delegate. The registration is th
 
 ROMAD team is not currently considering the bond deposits to solve the Nothing-at-Stake problem. We use the reputation idea instead.
 
-1. Initially each delegate gets a fixed reputation value ![Rho](./Rho.gif).
+1. Initially each delegate gets a fixed reputation value R: ρ = R.
 
 2. All reputation values are initially the same.
 
-3. If the verifier gets dangerous for the network, its reputation is algorithmically decreased using the predifined rules (see. 4.3. Consesus).
+3. If the verifier gets dangerous for the network, its reputation is algorithmically decreased using the predifined rule ρ = β * R, where β - penality factor (see. 4.3. Consesus)
 
 ## 4.3. Consensus
 ROMAD consensus is round based. The round is given to the verifiers to process a single block. The block processing is atomic. When the round is over, the block is either verified or not. When it is verified, it is immediately available to the blockchain.
