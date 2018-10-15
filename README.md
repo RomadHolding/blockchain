@@ -54,7 +54,7 @@ These are the edge cases. In general it is hard to distinguish between Public/Pr
 ## 1.4. ROMAD DLT requirements
 
   1. **The more tx/s, the better. Low latency.** tx/s is important in the commercial applications. ROMAD team does not forsee the significant amounts within the transactions in the near future so that the latency is not that important. However we want to keep it as low as possible.
-  2. ROMAD DLT is **resilint to the bad nodes**. These include the malicious ones as well.
+  2. ROMAD DLT is **resilent to the bad nodes**. These include the malicious ones as well.
   3. **Bit rate on writes**. ROMAD's ledger is to contain the malware data on the Stage I, so the write speed is very important.
   4. **Disk space**. The less, the better.
   5. ROMAD's ledger is the **public and open** one.
@@ -215,9 +215,9 @@ The following design principals will be used in ROMAD blockchain:
 ROMAD will use Delegated Byzantine Fault Tolerant (dBFT) consensus model similar to NEO or Tendermint. This is a distributed system which is peer-to-peer based. All messages are broadcasted.
 
 The ROMAD model has the following node types:
-1. Ordinary Nodes - the ROMAD tokens owners. They can create the transactions, up or downvote for a specific delegate.
+1. Ordinary Nodes - the ROMAD Endpoint Defense owners. They can create the transactions.
 2. Delegates - they check each and every block. The reward is given for the block check. The requirements are:
- * the HDD space for the Ethereum blockchain (>324.15 GB) (more research on the Simple Payment Verification is needed - proof of inclusion, this will allow to reduce the HDD requirements) and ROMAD blockchain (>100 GB);
+ * the HDD space for the ROMAD blockchain (>100 GB);
  * the high bandwidth Internet connection;
  * good CPU;
  * additional requirements may arise or the current requirements might even be decreased. This is not really important. What is important is that the delegate has no motivation to cheat. If they are unable to meet the requirements, they will never become the speaker and will never get the reward.
@@ -238,9 +238,9 @@ ROMAD team is not currently considering the bond deposits to solve the Nothing-a
 
 1. Initially each delegate gets a fixed reputation value ![Rho](./Rho.gif).
 
-2. All reputation values are the same and do not depends on the number of tokens at delegate's stacke.
+2. All reputation values are initially the same.
 
-3. If the verifier gets dangerous for the network, its reputation automatically decrease using predifined rules (see. 4.3. Consesus).
+3. If the verifier gets dangerous for the network, its reputation is algorithmically decreased using the predifined rules (see. 4.3. Consesus).
 
 ## 4.3. Consensus
 ROMAD consensus is round based. The round is given to the verifiers to process a single block. The block processing is atomic. When the round is over, the block is either verified or not. When it is verified, it is immediately available to the blockchain.
@@ -252,7 +252,7 @@ Consensus algorithm:
 4. Each delegate has a full copy of ROMAD blockchain and the certain data from Ethereum blockchain.
 5. When there is a certain number of the unverified transactions, each delegate starts the algorithm for the next speaker selection.
 6. The speaker generation algorithm state depends on the actual number of the transactions on the blockchain and the delegates' reputations.
-7. The delegates are calculating the reputation independently. The upvotes, downvotes are taken from ROMAD blockchain and the tokens amounts are taken from Ethereum blockchain.
+7. The delegates are calculating the reputation independently.
 8. The delegate who has generated identifier becomes a speaker and forms up a "suggestion".
 9. If for any reason the delegate does not form up a "suggestion", the unverified transations number grows up and the "suggestion" flag goes to the different delegate.
 10. Remember, the delegates see the same blockchain state in more or less synchronized manner, so everyone knows whose turn is it now to form up a "suggestion".
@@ -313,11 +313,13 @@ The algorithm ensuers the immediate transactions availability when the consensus
 # Questions & Answers
 ## 1. Is it possible that 2/3 of the delegates are malicious?
 
-We plan to have ~100 delegates (like Tendermint). As the token owners shall vote independently, it means the malicious party has to have at least 66% of the ROMAD tokens to create its puppet delegates. This seems to be expensive.
+We plan to have ~100 delegates (like Tendermint). It means there must be 66 malicious nodes that correspond to the hardware requirements. This seems unlikely.
+
+However, we may consider introducing some form of the formal pre-registration for becoming a delegate to further enhance the system security.
 
 ## 2. Anything else?
 
-The delegate must have the full ROMAD blockchain copy and at least a partial Ethereum blockchain copy. This is some form of the Proof-of-Space.
+The delegate must have the full ROMAD blockchain copy. This is some form of the Proof-of-Space.
 
 ## 3. How do you plan to protect against Nothing-at-Stake?
 
