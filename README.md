@@ -79,6 +79,7 @@ DAG-based DLT properties are:
 6. Transactions finality (Some DLTs do not have it, like IOTA)
 
 Some comparisons are present in [11]:
+
 ![Ledger Comparsion](./LedgerCompasion_01.jpg)
 
 Tempo Ledger is currently not very well studied, so ROMAD is not going to use it. ROMAD blockchain is based on DAG, as it is the fastest and most compact data structure currently proposed for DL implementation.
@@ -94,7 +95,7 @@ One of the possible classifications goes below.
 * Consensus protocol - the decisions are made in a coordinated manner by several nodes taking into consideration that some nodes might be malicious or work incorrectly.
 * Consensus protocol + PoW/PoET or PoR/PoI mixture. There are the tasks (e.g. choosing a voting committee, setting an offer, dealing with the protocol’s stagnation, etc) that still need a leader.  However the decision is still made in a coordinated manner.
 
-We believe **the consensus protocols or a mixture of the consensus protocols + PoR/PoI** suites us most. The consensus protocols are based on the state machine replication in the distributed environment (Leslie Lamport [12], [13] and Fred Schneider) [14]. It is true that in order for two or more nodes to come to a common decision they should possess the same input date necessary for the decision making, to be in the same state, and have the same state changing rules. All the consensus protocol’s variations are aimed at ensuring the replication with the minimum necessary information transferred.
+We believe **the consensus protocols or a mixture of the consensus protocols + PoR/PoI** suites us most. The consensus protocols are based on the state machine replication in the distributed environment (Leslie Lamport [12], [13] and Fred Schneider [14]). It is true that in order for two or more nodes to come to a common decision they should possess the same input date necessary for the decision making, to be in the same state, and have the same state changing rules. All the consensus protocol’s variations are aimed at ensuring the replication with the minimum necessary information transferred.
 
 The Proof-of-Work and Proof-of-Elapsed Time type protocols put a great load on the clients’ nodes. This is highly undesirable in case of the low capacity equipment.
 It is not advisable to use the leader-based protocol for the public ledger – it presupposes the individual trust to the leader. This is something to be avoided.
