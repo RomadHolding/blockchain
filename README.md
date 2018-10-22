@@ -1,3 +1,29 @@
+# Table of Contents
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+ * [1. Problems to be solved](#1-problems-to-be-solved)
+	* [1.1. Speed](#11-speed)
+	* [1.2. Security](#12-security)
+	* [1.3. Decentralization and openness](#13-decentralization-and-openness)
+	* [1.4. ROMAD DLT requirements](#14-romad-dlt-requirements)
+* [2. DLT types](#2-dlt-types)
+* [3. Consensuses](#3-consensuses)
+	* [3.1. Consensus protocols families](#31-consensus-protocols-families)
+	* [3.2. BFT/PBFT/ABFT/RBFT/DBFT algorithms comparison](#32-bftpbftabftrbftdbft-algorithms-comparison)
+	* [3.3. BFT drawbacks](#33-bft-drawbacks)
+	* [3.4. Conclusions](#34-conclusions)
+* [4. Model](#4-model)
+	* [4.1. Delegates](#41-delegates)
+	* [4.2. Reputation](#42-reputation)
+	* [4.3. Consensus](#43-consensus)
+* [Questions & Answers](#questions-answers)
+	* [1. Is it possible that 2/3 of the delegates are malicious?](#1-is-it-possible-that-23-of-the-delegates-are-malicious)
+	* [2. Anything else?](#2-anything-else)
+	* [3. How do you plan to protect against Nothing-at-Stake?](#3-how-do-you-plan-to-protect-against-nothing-at-stake)
+* [References](#references)
+
+<!-- /TOC -->
+
 These are the preliminatry design notes and considerations for ROMAD blockchain.
 
 # 1. Problems to be solved
@@ -84,8 +110,8 @@ Some comparisons are present in [11]:
 
 Tempo Ledger is currently not very well studied, so ROMAD is not going to use it. ROMAD blockchain is based on DAG, as it is the fastest and most compact data structure currently proposed for DL implementation.
 
-## 3. Consensuses
-### 3.1. Consensus protocols families
+# 3. Consensuses
+## 3.1. Consensus protocols families
 There are many known consensus protocols that can be used in DLT implementation [11].
 
 One of the possible classifications goes below.
@@ -123,7 +149,7 @@ The following table depicts the platforms’ description working on the above-me
 | RBFT (PBFT modification) | Sovrin, Hyperledger                    |
 | dBFT (PBFT modification) | NEO                                    |
 
-### 3.2. BFT/PBFT/ABFT/RBFT/DBFT algorithms comparison
+## 3.2. BFT/PBFT/ABFT/RBFT/DBFT algorithms comparison
 
 In fact, there are only two comprehensive comparisons of the PBFT protocols [24] and [25]. It is a problem as there is no significantly important number of the objective reviews. The algorithms need to be studied more. The research [24] offers the review based on the experimental comparison of the various algorithms’ implementation using the BFT-Bench framework. Even though the experimental comparison does not provide fully reliable information (the implementation process might have allowed for some mistakes), we are utilizing it as it is one of few sources providing the comparative time estimates.
 
@@ -177,7 +203,7 @@ Latency vs throughput for experiments running HoneyBadgerBFT over Tor.
 
 When there are more than 16 nodes, HoneyBadgerBFT provides the higher throughput than PBFT. When there are 64 nodes, the HoneyBadgerBFT's speed is 4-4.5 times better than PBFT's.
 
-### 3.3. BFT drawbacks
+## 3.3. BFT drawbacks
 
 1. Problem statement: the classic model works well in the small size groups, as it requires lots of messages to exchange.
    Solutions:
@@ -198,7 +224,7 @@ When there are more than 16 nodes, HoneyBadgerBFT provides the higher throughput
 
 ### 3.4. Conclusions
 
-1. Purely speculative the Hashgraph Virtual-Voting should give the best speed. However it is '''patented''': "Because a distributed database system 100 is used, no leader is appointed among the compute devices … Specifically, none of the compute devices … are identified and/or selected as a leader to settle disputes between values stored in the distributed database instances … of the compute devices . Instead, using the event synchronization processes, the voting processes and/or methods described herein, the compute devices … can collectively converge on a value for a parameter." [https://www.swirlds.com/ip/]->[USPTO 9,529,923].
+1. Purely speculative the Hashgraph Virtual-Voting should give the best speed. However it is '''patented''' in USPTO 9,529,923 [30]: "Because a distributed database system 100 is used, no leader is appointed among the compute devices … Specifically, none of the compute devices … are identified and/or selected as a leader to settle disputes between values stored in the distributed database instances … of the compute devices . Instead, using the event synchronization processes, the voting processes and/or methods described herein, the compute devices … can collectively converge on a value for a parameter.".
 2. RBFT (or Plenum) may theoretically be used. Not the best peak performance, however looks solid. However the replica crashes are very often (up to 1/3 from the total quantity of the consensus nodes). PoR may actucally save us here. We will be disabling the crashing nodes. Plenum is implemented in Hyperleger Indy [https://github.com/hyperledger/indy-plenum/wiki].
 3. HoneyBadgerBFT - some academia publications. The interesting idea and the fault tolerance are big pluses. The sources are available. No public reviews.
 
@@ -222,7 +248,7 @@ The ROMAD model has the following node types:
  * good CPU;
  * additional requirements may arise or the current requirements might even be decreased. This is not really important. What is important is that the delegate has no motivation to cheat. If they are unable to meet the requirements, they will never become the speaker and will never get the reward.
 
-The delegates are responsible not only for closing the rounds (see 4.3. Consensus), but also for the data format verification, including the statistical anomalies, e.g. the badly formatted writes on the blockchain from ROMAD Endpoint Defense software clones. Some other examples are the extremely frequent writes from the certain nodes, or the writes that do not contain the valid digital signatures. 
+The delegates are responsible not only for closing the rounds (see 4.3. Consensus), but also for the data format verification, including the statistical anomalies, e.g. the badly formatted writes on the blockchain from ROMAD Endpoint Defense software clones. Some other examples are the extremely frequent writes from the certain nodes, or the writes that do not contain the valid digital signatures.
 
 ***There should not be many delegates***, otherwise the voting process will require the significant time to complete. Initially we plan to have ~100 delegates. This number may go up or down (e.g. NEO has 51 delegate).
 
@@ -357,3 +383,4 @@ The delegate's faulty or malicious behavior is stored on the blockchain. It is i
 * [27] https://www.cointelligence.com/content/tangle-dag-vs-blockchain/
 * [28] https://steemit.com/cryptocurrency/@jimmco/byteball-vs-iota-battle-of-two-dag-cryptocurrencies
 * [29] https://medium.com/@bitrewards/blockchain-scalability-the-issues-and-proposed-solutions-2ec2c7ac98f0
+* [30] Swirlds Intellectual Property // https://www.swirlds.com/ip/
