@@ -210,7 +210,7 @@ The following design principals will be used in ROMAD blockchain:
 2. Sharding. **Motivation:** the sharding reduces the consensus time. Transactions finality becomes lower.
 3. Voting is based on the Proof-of-Reputation + penalties. The voting PoR nodes have the certain hardware requirements (see below). **Motivation:** faulty or malicious nodes will get penalized quickly. The Sybil attack possibility is low.
 4. Consensus type: dBFT.
-4. Digital signatures. ECC-Shnorr (like in Zilliqa) or some ECDSA treshold option.
+4. Digital signatures. ECC-Shnorr (like in Zilliqa) or some ECDSA threshold option.
 
 ROMAD will use Delegated Byzantine Fault Tolerant (dBFT) consensus model similar to NEO or Tendermint. This is a distributed system which is peer-to-peer based. All messages are broadcasted.
 
@@ -221,6 +221,8 @@ The ROMAD model has the following node types:
  * the high bandwidth Internet connection;
  * good CPU;
  * additional requirements may arise or the current requirements might even be decreased. This is not really important. What is important is that the delegate has no motivation to cheat. If they are unable to meet the requirements, they will never become the speaker and will never get the reward.
+
+The delegates are responsible not only for closing the rounds (see 4.3. Consensus), but also for the data format verification, including the statistical anomalies, e.g. the badly formatted writes on the blockchain from ROMAD Endpoint Defense software clones. Some other examples are the extremely frequent writes from the certain nodes, or the writes that do not contain the valid digital signatures. 
 
 ***There should not be many delegates***, otherwise the voting process will require the significant time to complete. Initially we plan to have ~100 delegates. This number may go up or down (e.g. NEO has 51 delegate).
 
@@ -283,7 +285,7 @@ where:
 15. The next round begins (goto 5) (yeah, goto haters!)
 
 ***If there are any violations on 12***, such as:
-  * the data format for the transaction is invalid;
+  * the data format for the transaction is invalid (see 4. Model);
   * the delegate became a speaker out-of-order;
   * the transactions are already on the blockchain;
   * not all contract scripts transactions are completed;
@@ -315,7 +317,7 @@ The algorithm ensuers the immediate transactions availability when the consensus
 
 We plan to have ~100 delegates (like Tendermint). It means there must be 66 malicious nodes that correspond to the hardware requirements. This seems unlikely.
 
-However, we may consider introducing some form of the formal pre-registration for becoming a delegate to further enhance the system security.
+However, we may consider introducing KYC for becoming a delegate to further enhance the system security.
 
 ## 2. Anything else?
 
