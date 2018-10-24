@@ -10,7 +10,7 @@
 * [3. Consensuses](#3-consensuses)
 	* [3.1. Consensus protocols families](#31-consensus-protocols-families)
 	* [3.2. BFT/PBFT/ABFT/RBFT/DBFT algorithms comparison](#32-bftpbftabftrbftdbft-algorithms-comparison)
-	* [3.3. BFT drawbacks](#33-bft-drawbacks)
+	* [3.3. BFT Issues and Solutions](#33-bft-issues-and-solutions)
 	* [3.4. Conclusions](#34-conclusions)
 * [4. Model](#4-model)
 	* [4.1. Delegates](#41-delegates)
@@ -44,14 +44,14 @@ The researchers are operating with the following DLT speed charateristics:
  2. The transaction latency. There is a time when the transaction is issued and a time when the transaction is initially confirmed. The time difference between these two events is the latency. This tends to be a more objective measurement metric, however it is not exhaustive as well.
  3. The finality is when the transaction is closed, i.e. there are no means to cancel or rollback it. In fact one can only trust the transfer performed by, e.g. a smart-contract, when the transaction is finalized.
 
-The most balanced option about the DLT speed charateristics is in the article of Andrei Grigorean at Hackernoon [5]:
+The most balanced opinion about the DLT speed charateristics is in the article of Andrei Grigorean at Hackernoon [5]:
  1. "For small payments, merchants would probably accept a payment the moment the transaction is initially confirmed, provided that they have a reasonably high confidence the payment will be accepted eventually."
  2. However: "for large money transfers, the receiver of the funds would probably want to wait for the transaction to become irreversible. Or at least, enough time should pass until a probabilistic finality is reached."
  3. And here we see one of the biggest DLT problems: "...In the financial industry, institutions need to know, preferably as quickly as possible, whether they truly own certain assets. If a public distributed ledger technology (DLT) is used to store the ownership information, the institutions also need to be sure it will not be possible to revert a certain transaction, making them lose the ownership rights..."
 
 ## 1.2. Security
 The DLT security actually assumes the system is able to function correctly when some nodes are performing incorrectly. The incorrectness can be a consequence of:
-- the simple hardware or software errors, i.e the node is faulty;
+- the hardware or software errors, i.e the node is faulty;
 - the malicious intents, i.e. the node behaves maliciously;
 - the load factor, i.e. the node is overloaded either because of the software design mistakes or the malicious intents;
 - the DLT network segmentation, i.e. some nodes cannot see the other ones.
@@ -79,7 +79,7 @@ These are the edge cases. In general it is hard to distinguish between Public/Pr
 
 ## 1.4. ROMAD DLT requirements
 
-  1. **The more tx/s, the better. Low latency.** tx/s is important in the commercial applications. ROMAD team does not forsee the significant amounts within the transactions in the near future so that the latency is not that important. However we want to keep it as low as possible.
+  1. **The more tx/s, the better. Low latency.** tx/s is important in the commercial applications. We believe our transactions are not going to transfer the significant amount of tokens in the near future so that the latency is not that important. However, we want to keep it as low as possible.
   2. ROMAD DLT is **resilent to the bad nodes**. These include the malicious ones as well.
   3. **Bit rate on writes**. ROMAD's ledger is to contain the malware data on the Stage I, so the write speed is very important.
   4. **Disk space**. The less, the better.
@@ -129,15 +129,15 @@ It is not advisable to use the leader-based protocol for the public ledger – i
 Here is a list of some consensus protocols [6]:
 1. Paxos is a family of protocols for solving consensus in a network of untrusted nodes [15].  It is possible the data transfer between the nodes can be corrupted. The protocol includes the clients (those willing to get the consensus decision), voters, a proposer (more commonly known as a speaker) and a leader who is a proposer making when the consensus progress in a dispute.
 2. Raft is a family of protocols designed as an alternative to Paxos [16]. Paxos implementation and verification are extremely difficult. Raft is easier to understand and implement. There are lots of implementations and visualisations with comprehensible specs in Go, C++, Java, and Scala.
-4. PBFT – there are many PBFT modifications. They are:
-   * classic PBFT [18]
-   * Federated Byzantine Agreement (FBA) [17].
-   * Zyzzyva [19]
-   * Aardvark [20]
-   * RBFT is an Aardvark enhancement on which Plenum is based (which is an upgraded RBFT and is used in Sovrin ledger and, thus, in Hyperledger as well [21])
-   * Delegated Byzantine Fault Tolerance [22]
-6. HoneyBadgerBFT (Hofburg Palace Vienna, Austria / October 24-28, 2016) - asynchronous BFT with the enhanced cryptography [6]
-7. Hashgraph Virtual-Voting - asynchronous BFT, not PBFT [23]
+4. BFT – there are many BFT modifications. They are:
+   * classic PBFT [18];
+   * Zyzzyva [19];
+   * Aardvark [20];
+   * Plenum (which is an upgraded RBFT and is used in Sovrin ledger and, thus, in Hyperledger as well [21]);
+   * Delegated Byzantine Fault Tolerance [22].
+5. Federated Byzantine Agreement (FBA) [17].
+6. HoneyBadgerBFT (Hofburg Palace Vienna, Austria / October 24-28, 2016) - asynchronous BFT with the enhanced cryptography [6].
+7. Hashgraph Virtual-Voting - asynchronous BFT, not PBFT [23].
 
 The following table depicts the platforms’ description working on the above-mentioned consensus protocol families:
 
@@ -203,7 +203,7 @@ Latency vs throughput for experiments running HoneyBadgerBFT over Tor.
 
 When there are more than 16 nodes, HoneyBadgerBFT provides the higher throughput than PBFT. When there are 64 nodes, the HoneyBadgerBFT's speed is 4-4.5 times better than PBFT's.
 
-## 3.3. BFT drawbacks
+## 3.3. BFT Issues and Solutions
 
 1. Problem statement: the classic model works well in the small size groups, as it requires lots of messages to exchange.
    Solutions:
@@ -225,14 +225,14 @@ When there are more than 16 nodes, HoneyBadgerBFT provides the higher throughput
 ### 3.4. Conclusions
 
 1. Purely speculative the Hashgraph Virtual-Voting should give the best speed. However it is **patented** in USPTO 9,529,923 [30]: "Because a distributed database system 100 is used, no leader is appointed among the compute devices … Specifically, none of the compute devices … are identified and/or selected as a leader to settle disputes between values stored in the distributed database instances … of the compute devices . Instead, using the event synchronization processes, the voting processes and/or methods described herein, the compute devices … can collectively converge on a value for a parameter.".
-2. RBFT (or Plenum) may theoretically be used. Not the best peak performance, however looks solid. However the replica crashes are very often (up to 1/3 from the total quantity of the consensus nodes). PoR may actucally save us here. We will be disabling the crashing nodes. Plenum is implemented in Hyperleger Indy [https://github.com/hyperledger/indy-plenum/wiki].
+2. RBFT (or Plenum) may theoretically be used. Not the best peak performance, however looks solid. However the replica crashes are very often (up to 1/3 from the total quantity of the consensus nodes). PoR may actucally save us here. We will be disabling the crashing nodes. Plenum is implemented in Hyperleger Indy (https://github.com/hyperledger/indy-plenum/wiki).
 3. HoneyBadgerBFT - some academia publications. The interesting idea and the fault tolerance are big pluses. The sources are available. No public reviews.
 
 The ROMAD consensus is going to be based on BFT (more precisely dBFT). Some ideas from the HoneyBadgerBFT shall be taken as well.
 
 # 4. Model
-The following design principals will be used in ROMAD blockchain:
-1. Directed Acyclic Graph. **Motivation:** the transactions can be done in parallel. It means better tx/s rate.
+The following design principals will be used in ROMAD Ledger:
+1. BlockDAG - Directed Acyclic Graph whose vertices represent blocks of transations and whose edges represent references from blocks to their predecessors. **Motivation:** the transactions can be done in parallel. It means better tx/s rate.
 2. Sharding. **Motivation:** the sharding reduces the consensus time. Transactions finality becomes lower.
 3. Voting is based on the Proof-of-Reputation + penalties. The voting PoR nodes have the certain hardware requirements (see below). **Motivation:** faulty or malicious nodes will get penalized quickly. The Sybil attack possibility is low.
 4. Consensus type: dBFT.
@@ -245,7 +245,7 @@ The ROMAD model has the following node types:
 2. Delegates - they check each and every block. The reward is given for the block check. The requirements are:
  * the HDD space for the ROMAD blockchain (>100 GB);
  * the high bandwidth Internet connection;
- * good CPU;
+ * fast CPU;
  * additional requirements may arise or the current requirements might even be decreased. This is not really important. What is important is that the delegate has no motivation to cheat. If they are unable to meet the requirements, they will never become the speaker and will never get the reward.
 
 The delegates are responsible not only for closing the rounds (see 4.3. Consensus), but also for the data format verification, including the statistical anomalies, e.g. the badly formatted writes on the blockchain from ROMAD Endpoint Defense software clones. Some other examples are the extremely frequent writes from the certain nodes, or the writes that do not contain the valid digital signatures.
@@ -260,15 +260,79 @@ dBFT assumes each block is verified by a number of delegates. When the block is 
 To become a delegate one needs to register as a delegate. The registration is the special transaction. Remember the transactions are broadcasted, the other nodes shall get it fast enough.
 
 ## 4.2. Reputation
-**The Nothing-at-Stake problem is the verifiers can do a mess if there is no penalty for their actions.** The mess example is, e.g. an invalid transaction confirmation. The common solution for the Nothing-at-Stake problem is the bond deposits [2]. This means the certain amount of the money is blocked on the verifier's account until it is proved the transaction does not create any conflicts to the blockchain.
+**The Nothing-at-Stake problem is when verifiers can do a mess if there is no penalty for their actions.** The mess example is, e.g. an invalid transaction confirmation. The common solution for the Nothing-at-Stake problem is the bond deposits [2]. It means the certain amount of money is frozen on the verifier's account until it is proved the transaction does not create any conflicts to the blockchain.
 
 ROMAD team is not currently considering the bond deposits to solve the Nothing-at-Stake problem. We use the reputation idea instead.
 
-1. Initially each delegate gets a fixed reputation value R: ρ = R.
+1. Initially each delegate gets a fixed reputation value: ρ = 0.5 (see below).
 
-2. All reputation values are initially the same.
+2. All reputation values are initially the same.  We do not plan to use the external reputation (such as the one suggested in [31]).
 
-3. If the verifier gets dangerous for the network, its reputation is algorithmically decreased using the predifined rule ρ = β * R, where β - penalty factor (see. 4.3. Consesus)
+3. There are two ways to control the reputation:
+  - to decrease it when a delegate performs malicious or unexpected actions. This allows us to support the system health by removing the malicious nodes (that are trying to sabotage the consensus process) or cheating nodes (that are trying to get a reward without doing any computations). Please refer to 4.3 Consensus, step 12 for more details on decreasing the reputation.
+  - to encourage a node if it works in an expected manner for a continuous time frame. The reputation value determines the delegate's ability to become a speaker. Thus it is profitable for a 3rd party to keep the node up and running due to the system rules. Please refer to 4.3 Consensus for more details on increasing the reputation.
+
+4. The reputation value can be calculated based on the data from the blockchain. Each delegate can calculate the reputation for the others.
+
+Warren Buffet once said, "It takes 20 years to build a reputation and five minutes to ruin it". There are mathematical methods for PoR to mimic this behavior. The slowly growing asymptotic function is used to increase ρ and the fast descending asymptotically striving to zero function is used to decrease it. ρ in (0..1].
+
+The reputation increasing function must have the following properties [31]:
+  - slow start and initial growth;
+  - fast acceleration in the middle of the life cycle. This is needed to reward the mature nodes;
+  - asymptoticity, e.g. an ability to stop growing indefinitely.
+
+The following formula is used: 1/(1 + exp(-s * α)), where s - the number of consensus in which the decision of the delegate coincided with the result of consensus, α = 0.000057.
+The reputation decreasing function must be able to lower it down exponentially or even faster. The following formula is used: 1/(β^f) , where f - is the fails number for the given delegate, β = 1.25
+
+![Partial functions](./PartialFunctions.png)
+
+The generalized function is thus: ρ  = 1/((1 + exp(-s * α))*(β^f).
+
+![Reputation function](./ReputationFunction.png)
+
+The α and β selection criteria:
+ - For the just starting delegate s=0, f=0 and ρ = 0.5.
+ - The maximum possible value for ρ = 1.
+ - Each delegate is predicted to participate in the consensus round once per 3 minutes. If there are no mistakes for a period of a year (s = 175200), the delegate will reach the maximum possible ρ = 1.
+ - When ρ < θ = 0.3275, the delegate is excluded from the group.
+
+E.g., 3 mistakes (f=3) for a delegate that has made 175200 successful consensuses will decrease its reputation to ρ = 0.512. This leads to a two times lower ability to become a speaker. Seven mistakes will lead to ρ = 0.2097 and the exclusion from the consensus group.
+
+The table below shows the numerical values for the delegates' generalized function ρ based on the number of the successful consensuses and mistakes made:
+
+|            | f= 0   | f= 1   | f= 3   | f= 5   | f= 7   |
+| ---------- | ------ | ------ | ------ | ------ | ------ |
+| s=0        | 0.5000 | 0.4000 | 0.2560 | 0.1638 | 0.1049 |
+| s=1000     | 0.5142 | 0.4114 | 0.2633 | 0.1685 | 0.1078 |
+| s=10000    | 0.6388 | 0.5110 | 0.3270 | 0.2093 | 0.1340 |
+| s=80000    | 0.9896 | 0.7917 | 0.5067 | 0.3243 | 0.2075 |
+| s=100000   | 0.9967 | 0.7973 | 0.5103 | 0.3266 | 0.2090 |
+| s=175200   | 1.0000 | 0.8000 | 0.5120 | 0.3277 | 0.2097 |
+| s=500000   | 1.0000 | 0.8000 | 0.5120 | 0.3277 | 0.2097 |
+| s=1000000  | 1.0000 | 0.8000 | 0.5120 | 0.3277 | 0.2097 |
+| s=10000000 | 1.0000 | 0.8000 | 0.5120 | 0.3277 | 0.2097 |
+
+It is possible to tweak α, β and θ in any manner to adjust for the different consensus rounds periodicity or the punishment rules.
+
+5. The speaker's reward depends on the reputation:
+  - The bigger the reputation (ρ), the more often the delegate becomes a speaker.
+  - The transaction has a transaction fee.
+  - The speaker gets the transaction fee.
+
+**Motivation:** the delegate may try to deceive a consensus in a number of ways. One option is to give a random response message or a most statistically frequent message. However, the variety of cheating options leads to just a couple of outcomes:
+  - the delegate has voted against the consensus without doing any computations (on purpose or just by pure chance). The delegate will be punished and its reputation will be decreased.
+
+  - the delegate has voted for the consensus without doing any computations (just supported the majority). Unfortunately, it means the cheater will also get its reputation increasing.
+
+The speaker has no options to cheat on the consensus. Once the proposal message is generated, it means the speaker has done the computations required.
+
+The possible attacks are:
+
+1. The delegate does not want to participate as a speaker for the consensus. Thus, it will not get the reward; there is no financial motivation to cheat. The side effect is the slower consensus when the delegates are going to wait for the suggestion from the non-functioning speaker, see 4.3. Consensus, step 11.
+
+2. The delegate wants to be a speaker only. In this scenario, its reputation is going to grow 100 times slower, then for the delegates that obey the consensus rules. The delegate becomes a speaker less and less often, thus it gets a reward less and less often. The side effect is the slower consensus time. However, as the delegate becomes the speaker less and less often, the side effect becomes negligible as the time goes by.
+
+3. The delegate does not participate at all. This is a combination of 1 and 2. No reputation growth, no reward.
 
 ## 4.3. Consensus
 ROMAD consensus is round based. The round is given to the verifiers to process a single block. The block processing is atomic. When the round is over, the block is either verified or not. When it is verified, it is immediately available to the blockchain.
@@ -308,7 +372,8 @@ where:
   *	r - the delegate reputation
   *	![Block2](./Eqn4.gif) - the _block_ is signed with the secret key P_d of the user _d_.
 14. When there is a message Reposnse: Proposal Agree  from (𝑛 - 𝑓) delegates, every delegate understands there is a consensus and the full block is written on the blockchain.
-15. The next round begins (goto 5) (yeah, goto haters!)
+15. Each delegate who voted in the same way as the entire consensus increases the value s: s = s+1. However, for each delegate who made a mistake in voting, the value increases f = f+1. As indicated earlier, an increase in values s and f occurs only according to the blockchain independently, but agreed among all the participants in the consensus group.
+16. The next round begins (goto 5) (yeah, goto haters!)
 
 ***If there are any violations on 12***, such as:
   * the data format for the transaction is invalid (see 4. Model);
@@ -318,7 +383,7 @@ where:
   * double spent is detected;
   * the wrong link to the previous block (the fork attempt);
   * the speaker reputation is not corresponding to the one stated in the message;
-  * the speaker reputation is 0.
+  * the speaker reputation is less θ
 
 ***the block is considered invalid.*** The delegate that has detected this, does the following:
   * sends the Proposal Failed message.
@@ -326,7 +391,8 @@ where:
 
 When the other verifiers are getting the Proposal Failed message and there are at least (𝑛 - 𝑓) of them, they also send the ChangeView message.
   * Thus the malicious speaker is opted out for the different one;
-  * the malicious speaker is penalized with decreasing β=1/e^((f-1)*2) , where f - is the fails number for the given speaker. A single fail, therefore, is of no importance, 2 fails decrease the reputation 8 times, 5 fails will completely nullify the reputation;
+  * fails number for the given speaker (f) increased;
+  * the malicious speaker is penalized ρ  = 1/((1 + exp(-s * α))*(β^f) , where f - is the fails number for the given speaker.
   * the Response messages are stored on the blockchain.
 
 ***If there is a timeout on 14*** and there are no (𝑛 - 𝑓) response messages
@@ -351,7 +417,8 @@ The delegate must have the full ROMAD blockchain copy. This is some form of the 
 
 ## 3. How do you plan to protect against Nothing-at-Stake?
 
-The delegate's faulty or malicious behavior is stored on the blockchain. It is its reputation automatically decrease. Just 2 mistakes will lower the reputation 8 times. 3 mistakes will lower it 54 times. This way the penalized delegate will become a speaker less and less often.
+The delegate's faulty or malicious behavior is stored on the blockchain. The reputation is decreased exponentially. Just 3 mistakes will lower about 2 times (x1.95). 7 fails will lead to an exclusion from the delegates pool forever.
+
 
 # References
 * [1] https://www.coinbureau.com/analysis/solving-blockchain-trilemma/
@@ -384,3 +451,5 @@ The delegate's faulty or malicious behavior is stored on the blockchain. It is i
 * [28] https://steemit.com/cryptocurrency/@jimmco/byteball-vs-iota-battle-of-two-dag-cryptocurrencies
 * [29] https://medium.com/@bitrewards/blockchain-scalability-the-issues-and-proposed-solutions-2ec2c7ac98f0
 * [30] Swirlds Intellectual Property // https://www.swirlds.com/ip/
+* [31] Yu, Jiangshan & Kozhaya, David & Decouchant, Jeremie & Veríssimo, Paulo. (2018). RepuCoin: Your Reputation is Your Power. URL: https://eprint.iacr.org/2018/239.pdf
+* [32] Alexandra Tran An Introduction to the BlockDAG Paradigm URL: https://blog.daglabs.com/an-introduction-to-thAlexandra Tran e-blockdag-paradigm-50027f44facb
