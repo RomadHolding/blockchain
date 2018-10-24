@@ -272,16 +272,16 @@ ROMAD team is not currently considering the bond deposits to solve the Nothing-a
   - to decrease it when a delegate performs malicious or unexpected actions. This allows us to support the system health by removing the malicious nodes (that are trying to sabotage the consensus process) or cheating nodes (that are trying to get a reward without doing any computations). Please refer to 4.3 Consensus, step 12 for more details on decreasing the reputation.
   - to encourage a node if it works in an expected manner for a continuous time frame. The reputation value determines the delegate's ability to become a speaker. Thus it is profitable for a 3rd party to keep the node up and running due to the system rules. Please refer to 4.3 Consensus for more details on increasing the reputation.
 
-4. The reputation value can be calculated based on the data from the blockchain. Each delegate can calculate the reputation for the others.
+4. The reputation value can be calculated based on the data from the blockchain. Each delegate can calculate the reputation for the others, see 4.3 Consensus, steps 12 & 13.
 
-Warren Buffet once said, "It takes 20 years to build a reputation and five minutes to ruin it". There are mathematical methods for PoR to mimic this behavior. The slowly growing asymptotic function is used to increase ρ and the fast descending asymptotically striving to zero function is used to decrease it. ρ in (0..1].
+Warren Buffet once said, "It takes 20 years to build a reputation and five minutes to ruin it". There are mathematical methods for PoR to mimic this behavior. The slowly growing asymptotic function is used to increase ρ and the fast descending asymptotically striving to zero function is used to decrease it. ρ is in (0..1].
 
 The reputation increasing function must have the following properties [31]:
   - slow start and initial growth;
   - fast acceleration in the middle of the life cycle. This is needed to reward the mature nodes;
   - asymptoticity, e.g. an ability to stop growing indefinitely.
 
-The following formula is used: 1/(1 + exp(-s * α)), where s - the number of consensus in which the decision of the delegate coincided with the result of consensus, α = 0.000057.
+The following formula is used: 1/(1 + exp(-s * α)), where s - the number of the consensuses, where the delegates commonly agreed, α = 0.000057.
 The reputation decreasing function must be able to lower it down exponentially or even faster. The following formula is used: 1/(β^f) , where f - is the fails number for the given delegate, β = 1.25
 
 ![Partial functions](./PartialFunctions.png)
@@ -322,7 +322,7 @@ It is possible to tweak α, β and θ in any manner to adjust for the different 
 **Motivation:** the delegate may try to deceive a consensus in a number of ways. One option is to give a random response message or a most statistically frequent message. However, the variety of cheating options leads to just a couple of outcomes:
   - the delegate has voted against the consensus without doing any computations (on purpose or just by pure chance). The delegate will be punished and its reputation will be decreased.
 
-  - the delegate has voted for the consensus without doing any computations (just supported the majority). Unfortunately, it means the cheater will also get its reputation increasing.
+  - the delegate has voted for the consensus without doing any computations (just supported the majority). Unfortunately, it means the cheater will also get its reputation increase.
 
 The speaker has no options to cheat on the consensus. Once the proposal message is generated, it means the speaker has done the computations required.
 
@@ -371,19 +371,19 @@ where:
   *	d - the delegate identifier
   *	r - the delegate reputation
   *	![Block2](./Eqn4.gif) - the _block_ is signed with the secret key P_d of the user _d_.
-14. When there is a message Reposnse: Proposal Agree  from (𝑛 - 𝑓) delegates, every delegate understands there is a consensus and the full block is written on the blockchain.
-15. Each delegate who voted in the same way as the entire consensus increases the value s: s = s+1. However, for each delegate who made a mistake in voting, the value increases f = f+1. As indicated earlier, an increase in values s and f occurs only according to the blockchain independently, but agreed among all the participants in the consensus group.
+14. When there is a message Response: Proposal Agree  from (𝑛 - 𝑓) delegates, every delegate understands there is a consensus and the full block is written on the blockchain.
+15. Each delegate who voted in the same way as the entire consensus increases the value s: s = s+1. However, for each delegate who made a mistake in voting, f = f+1. As the messages from step 12 and 13 are written on the blockchain, each delegate can compute the s and f values independently. 
 16. The next round begins (goto 5) (yeah, goto haters!)
 
 ***If there are any violations on 12***, such as:
-  * the data format for the transaction is invalid (see 4. Model);
+  * the data block of the transaction is invalid (see 4. Model);
   * the delegate became a speaker out-of-order;
   * the transactions are already on the blockchain;
   * not all contract scripts transactions are completed;
   * double spent is detected;
   * the wrong link to the previous block (the fork attempt);
   * the speaker reputation is not corresponding to the one stated in the message;
-  * the speaker reputation is less θ
+  * the speaker reputation is < θ
 
 ***the block is considered invalid.*** The delegate that has detected this, does the following:
   * sends the Proposal Failed message.
@@ -399,7 +399,7 @@ When the other verifiers are getting the Proposal Failed message and there are a
 ***then:***
   * Any delegate sends Response = ChangeView message
 	* when the other delegates are getting the ChangeView message and there are at least (𝑛 − 𝑓) of them, they also send the ChangeView message.
-	* The view_number is changes, the speaker is also changed.
+	* The view_number changes, the speaker is also changed.
 	* No penalties for the speaker in this case.
 
 The algorithm ensuers the immediate transactions availability when the consensus round is over.
