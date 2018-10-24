@@ -1,5 +1,5 @@
 # Table of Contents
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:0 orderedList:0 -->
 
  * [1. Problems to be solved](#1-problems-to-be-solved)
 	* [1.1. Speed](#11-speed)
@@ -220,7 +220,7 @@ When there are more than 16 nodes, HoneyBadgerBFT provides the higher throughput
 
 4. Problem statement: DDoS.
    Solutions:
-    * RBFT is immune to DDoS (see the charts above). HoneyBadgerBFT '''seems''' to be immune as well. Needs to be proved.
+    * RBFT is immune to DDoS (see the charts above). HoneyBadgerBFT **seems** to be immune as well. Needs to be proved.
 
 ### 3.4. Conclusions
 
