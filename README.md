@@ -248,6 +248,8 @@ The ROMAD model has the following node types:
  * fast CPU;
  * additional requirements may arise or the current requirements might even be decreased. This is not really important. What is important is that the delegate has no motivation to cheat. If they are unable to meet the requirements, they will never become the speaker and will never get the reward.
 
+![Tech Explanation](./TechExplanation.png)
+
 The delegates are responsible not only for closing the rounds (see 4.3. Consensus), but also for the data format verification, including the statistical anomalies, e.g. the badly formatted writes on the blockchain from ROMAD Endpoint Defense software clones. Some other examples are the extremely frequent writes from the certain nodes, or the writes that do not contain the valid digital signatures.
 
 ***There should not be many delegates***, otherwise the voting process will require the significant time to complete. Initially we plan to have ~100 delegates. This number may go up or down (e.g. NEO has 51 delegate).
