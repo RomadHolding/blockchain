@@ -242,7 +242,7 @@ ROMAD will use Delegated Byzantine Fault Tolerant (dBFT) consensus model similar
 
 The ROMAD model has the following node types:
 1. Ordinary Nodes - the ROMAD Endpoint Defense owners. They can create the transactions.
-2. Delegates - they check each and every block. The reward is given for the block check. The requirements are:
+2. Delegates - they check each and every block. The reward is given for the block check in a manner similar to that from Dash [33]. The requirements are:
  * the HDD space for the ROMAD blockchain (>100 GB);
  * the high bandwidth Internet connection;
  * fast CPU;
@@ -259,12 +259,12 @@ dBFT assumes each block is verified by a number of delegates. When the block is 
 2. The other delegates are the verifiers. For the block to get verified, it needs to contain at least n-f signatures, where f = floor( (n-1)/3) ), where n is the number of the verifiers.
 
 ## 4.1. Delegates
-To become a delegate one needs to register as a delegate. The registration is the special transaction. Remember the transactions are broadcasted, the other nodes shall get it fast enough.
+To become a delegate one needs to have a collateral. Once the collateral is transferred and locked, the node may start functioning as a delegate or a speaker. The registration is the special transaction. Remember the transactions are broadcasted, the other nodes shall get it fast enough.
 
 ## 4.2. Reputation
-**The Nothing-at-Stake problem is when verifiers can do a mess if there is no penalty for their actions.** The mess example is, e.g. an invalid transaction confirmation. The common solution for the Nothing-at-Stake problem is the bond deposits [2]. It means the certain amount of money is frozen on the verifier's account until it is proved the transaction does not create any conflicts to the blockchain.
+**The Nothing-at-Stake problem is when verifiers can do a mess if there is no penalty for their actions.** The mess example is, e.g. an invalid transaction confirmation or different attacks on the blockchain (e.g. Short Range, Long Range, etc). The common solution for the Nothing-at-Stake problem is the collateral [2]. It means the certain amount of money is frozen on the verifier's account until it is proved the transaction does not create any conflicts to the blockchain.
 
-ROMAD team is not currently considering the bond deposits to solve the Nothing-at-Stake problem. We use the reputation idea instead.
+ROMAD team goes further. The collateral can be taken out from the node owner when the node reputation is flawed. The following algorithm is used to compute the reputation:
 
 1. Initially each delegate gets a fixed reputation value: ρ = 0.5 (see below).
 
@@ -336,6 +336,8 @@ The possible attacks are:
 
 3. The delegate does not participate at all. This is a combination of 1 and 2. No reputation growth, no reward.
 
+4. The delegate has the sole purpose of damaging the ledger [34].  Reputation penalties, collateral loss, exclusion from the consensus group.
+
 ## 4.3. Consensus
 ROMAD consensus is round based. The round is given to the verifiers to process a single block. The block processing is atomic. When the round is over, the block is either verified or not. When it is verified, it is immediately available to the blockchain.
 
@@ -386,6 +388,7 @@ where:
   * the wrong link to the previous block (the fork attempt);
   * the speaker reputation is not corresponding to the one stated in the message;
   * the speaker reputation is < θ
+  * an attack attempt is detected
 
 ***the block is considered invalid.*** The delegate that has detected this, does the following:
   * sends the Proposal Failed message.
@@ -411,7 +414,7 @@ The algorithm ensuers the immediate transactions availability when the consensus
 
 We plan to have ~100 delegates (like Tendermint). It means there must be 66 malicious nodes that correspond to the hardware requirements. This seems unlikely.
 
-However, we may consider introducing KYC for becoming a delegate to further enhance the system security.
+Also keep in mind the collateral is required to become a delegate. There is no financial motivation to cheat. And there is a punishment if there is a cheating attempt.
 
 ## 2. Anything else?
 
@@ -419,7 +422,9 @@ The delegate must have the full ROMAD blockchain copy. This is some form of the 
 
 ## 3. How do you plan to protect against Nothing-at-Stake?
 
-The delegate's faulty or malicious behavior is stored on the blockchain. The reputation is decreased exponentially. Just 3 mistakes will lower about 2 times (x1.95). 7 fails will lead to an exclusion from the delegates pool forever.
+The delegate's faulty or malicious behavior is to be detected by the other delegates. The reputation is decreased exponentially. Just 3 mistakes will lower about 2 times (x1.95). 7 fails will lead to an exclusion from the delegates pool forever.
+
+ROMAD team will issue a separate document on the blockchain attacks and the preventive measures.
 
 
 # References
@@ -455,3 +460,5 @@ The delegate's faulty or malicious behavior is stored on the blockchain. The rep
 * [30] Swirlds Intellectual Property // https://www.swirlds.com/ip/
 * [31] Yu, Jiangshan & Kozhaya, David & Decouchant, Jeremie & Veríssimo, Paulo. (2018). RepuCoin: Your Reputation is Your Power. URL: https://eprint.iacr.org/2018/239.pdf
 * [32] Alexandra Tran An Introduction to the BlockDAG Paradigm URL: https://blog.daglabs.com/an-introduction-to-thAlexandra Tran e-blockdag-paradigm-50027f44facb
+* [33] https://www.dash.org/masternodes/
+* [34] https://blog.positive.com/rewriting-history-a-brief-introduction-to-long-range-attacks-54e473acdba9
